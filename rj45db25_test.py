@@ -40,6 +40,23 @@ def signal_handler(signal, frame):
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
+ser = serial.Serial()
+ser.port = '/dev/ttyACM0'
+ser.baudrate = 115200
+ser.timeout = 0
+ser.setDTR = False
+try: ser.open()
+except Exception as e: print(e)
+ser.flushOutput()
+ser.flushInput()
+
+for count in range(5):
+    #print colored("time: " + str(count * 0.5),'red')
+    time.sleep(0.5)
+    output = ser.read(500).strip().decode('utf-8')
+    #print colored("output_length: " + str(len(output)),'red')
+    if len(output):
+      print(colored(output,'cyan'),end='')
 
 while True:
     serialNumber = ""
@@ -65,18 +82,9 @@ while True:
 
     print("starting test...")
 
-    ser = serial.Serial()
-    ser.port = '/dev/ttyACM0'
-    ser.baudrate = 115200
-    ser.timeout = 0
-    try: ser.open()
-    except Exception as e: print(e)
-    ser.flushOutput()
-    ser.flushInput()
-
-    ser.write(b'?\n')
-    time.sleep(0.2)
-    print(colored(ser.read(500).decode('utf-8'),'cyan'))
+    ser.write(b'F\n')
+    #time.sleep(0.2)
+    #print(colored(ser.read(500).decode('utf-8'),'cyan'))
 
     full_output = ""
     test_result = "Failed"
@@ -87,7 +95,7 @@ while True:
         output = ser.read(500).strip().decode('utf-8')
         #print colored("output_length: " + str(len(output)),'red')
         if len(output):
-          print(colored(output,'cyan'))
+          print(colored(output,'cyan'),end='')
           full_output = full_output + output
 
     if("Passed" in full_output):
@@ -95,7 +103,7 @@ while True:
 
     ser.flushOutput()
     ser.flushInput()
-    ser.close()
+    #ser.close()
     
     print("Test Result: " + test_result)
 
