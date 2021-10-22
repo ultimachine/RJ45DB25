@@ -48,11 +48,13 @@ while True:
 
     try:
         sNum = int(serialNumber)
-        if( sNum not in range(45250001,45259000) ):
-            print(colored("Invalid Entry. (Use 45250001-45259000).",'magenta'))
+        lowerLimit = 45000001
+        upperLimit = 45990000
+        if( sNum not in range(lowerLimit,upperLimit) ):
+            print(colored("Invalid Entry. (Use "+str(lowerLimit)+"-"+str(upperLimit)+").",'magenta'))
             continue
     except:
-            print("Invalid Entry. (Use 45250001-45259000).")
+            print("Invalid Entry. (Use "+str(lowerLimit)+"-"+str(upperLimit)+").")
             continue
 
     print("Press [Enter] to start test")
